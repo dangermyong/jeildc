@@ -1,11 +1,3 @@
-<route lang="json">
-{
-  "meta": {
-    "title": "About"
-  }
-}
-</route>
-
 <script setup>
 
 </script>

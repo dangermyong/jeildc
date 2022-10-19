@@ -7,7 +7,7 @@ const user = reactive({
 })
 
 function signIn() {
-  console.log(user.email, user.password);
+  console.log(user.email, user.password)
 }
 
 </script>

@@ -20,9 +20,7 @@ function register() {
       console.log(errorMessage)
     })
 }
-
-
-
+// https://youtu.be/xceR7mrrXsA  이거 보고 네비게이션 가드 완성하기
 
 </script>
 
