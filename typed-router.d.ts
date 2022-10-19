@@ -10,9 +10,6 @@ import type {
   RouteLocationResolvedTypedList,
   RouteLocationNormalizedTypedList,
   RouteLocationNormalizedLoadedTypedList,
-  RouteLocationAsString,
-  RouteLocationAsRelativeTypedList,
-  RouteLocationAsPathTypedList,
 
   // helper types
   // route definitions
@@ -37,8 +34,9 @@ declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
     '/[...404]': RouteRecordInfo<'/[...404]', '/:404(.*)', { 404: ParamValue<true> }, { 404: ParamValue<false> }>,
     '/AboutPage': RouteRecordInfo<'/AboutPage', '/AboutPage', Record<never, never>, Record<never, never>>,
-    '/AuthPage': RouteRecordInfo<'/AuthPage', '/AuthPage', Record<never, never>, Record<never, never>>,
     '/HomePage': RouteRecordInfo<'/HomePage', '/HomePage', Record<never, never>, Record<never, never>>,
+    '/RegisterPage': RouteRecordInfo<'/RegisterPage', '/RegisterPage', Record<never, never>, Record<never, never>>,
+    '/SignInPage': RouteRecordInfo<'/SignInPage', '/SignInPage', Record<never, never>, Record<never, never>>,
   }
 }
 
@@ -69,14 +67,6 @@ declare module 'vue-router/auto' {
    * Type safe version of `RouteLocation` . Allows passing the name of the route to be passed as a generic.
    */
   export type RouteLocation<Name extends keyof RouteNamedMap = keyof RouteNamedMap> = RouteLocationTypedList<RouteNamedMap>[Name]
-
-  /**
-   * Type safe version of `RouteLocationRaw` . Allows passing the name of the route to be passed as a generic.
-   */
-  export type RouteLocationRaw<Name extends keyof RouteNamedMap = keyof RouteNamedMap> =
-    | RouteLocationAsString<RouteNamedMap>
-    | RouteLocationAsRelativeTypedList<RouteNamedMap>[Name]
-    | RouteLocationAsPathTypedList<RouteNamedMap>[Name]
 
   /**
    * Generate a type safe params for a route location. Requires the name of the route to be passed as a generic.

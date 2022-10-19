@@ -19,12 +19,13 @@
                 <router-link to="/" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
                   aria-current="page">Home</router-link>
 
-                <router-link to="/about"
+                <router-link to="/signin"
                   class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                  About</router-link>
+                  Sign In</router-link>
 
-                <router-link to="/auth"
-                  class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Auth
+                <router-link to="/register"
+                  class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                  Register
                 </router-link>
               </div>
             </div>
