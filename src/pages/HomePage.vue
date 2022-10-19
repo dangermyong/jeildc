@@ -1,15 +1,5 @@
-<route lang="json">
-{
-  "meta": {
-    "title": "Home"
-  }
-}
-</route>
-
 <script setup>
-useHead({
-  title: 'Home',
-})
+
 </script>
 
 <template>
