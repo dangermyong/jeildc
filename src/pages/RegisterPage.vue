@@ -2,7 +2,9 @@
 import { reactive } from 'vue'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from '@/js/firebase.js'
+import { useRouter } from 'vue-router '
 
+const router = useRouter()
 const userInfo = reactive({
   email: '',
   password: ''
@@ -13,11 +15,12 @@ function register() {
   createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
     .then((userCredential) => {
       const user = userCredential.user
-      console.log(user);
+      console.log(user)
+      router.push('/about')
     })
     .catch((error) => {
-      const errorMessage = error.message
-      console.log(errorMessage)
+      console.log(error.message)
+      alert(error.message)
     })
 }
 // https://youtu.be/xceR7mrrXsA  이거 보고 네비게이션 가드 완성하기

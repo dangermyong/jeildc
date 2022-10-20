@@ -1,14 +1,43 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '@/js/firebase.js'
+import { useRouter } from 'vue-router '
 
-const user = reactive({
+const router = useRouter()
+const userInfo = reactive({
   email: '',
   password: ''
 })
+const errMsg = ref()
 
-function signIn() {
-  console.log(user.email, user.password)
+function signin() {
+  signInWithEmailAndPassword(auth, userInfo.email, userInfo.password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log(user)
+      router.push('/about')
+    })
+    .catch((error) => {
+      console.log(error.message)
+      switch (error.code) {
+        case 'auth/invalide-email':
+          errMsg.value = 'Invalid email'
+          break;
+        case 'auth/user-not-found':
+          errMsg.value = 'user-not-found'
+          break;
+        case 'auth/wrong-password':
+          errMsg.value = 'wrong-password'
+          break;
+        default:
+          errMsg.value = 'Email or password was incorrect'
+          break;
+      }
+    })
 }
+
+// https://youtu.be/xceR7mrrXsA  이거 보고 네비게이션 가드 완성하기
 
 </script>
 
@@ -24,13 +53,13 @@ function signIn() {
           <div class="-space-y-px rounded-md shadow-sm">
             <div>
               <label for="email-address" class="sr-only">Email address</label>
-              <input v-model="user.email" id="email-address"
+              <input v-model="userInfo.email" id="email-address"
                 class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 autocomplete="email" name="email" placeholder="Email address" type="email" required>
             </div>
             <div>
               <label for="password" class="sr-only">Password</label>
-              <input v-model="user.password" id="password" name="password" type="password"
+              <input v-model="userInfo.password" id="password" name="password" type="password"
                 autocomplete="current-password" required
                 class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 placeholder="Password">
@@ -50,7 +79,7 @@ function signIn() {
           </div>
 
           <div>
-            <button @click.prevent="signIn" type="submit"
+            <div @click.prevent="signin" type="submit"
               class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
               <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                 <!-- Heroicon name: mini/lock-closed -->
@@ -62,7 +91,8 @@ function signIn() {
                 </svg>
               </span>
               Sign in
-            </button>
+            </div>
+            <p v-if="errMsg">{{ errMsg }}</p>
           </div>
         </form>
       </div>

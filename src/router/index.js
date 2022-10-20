@@ -3,6 +3,7 @@ import HomePage from '@/pages/HomePage.vue'
 import AboutPage from '@/pages/AboutPage.vue'
 import SignInPage from '@/pages/SignInPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 const routes = [
   {
@@ -14,6 +15,9 @@ const routes = [
     path: '/about',
     name: 'about',
     component: AboutPage,
+    meta: {
+      requiresAuth: true,
+    }
   },
   {
     path: '/signin',
@@ -30,6 +34,32 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+})
+
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const removeListener = onAuthStateChanged(
+      getAuth(),
+      (user) => {
+        removeListener()
+        resolve(user)
+      },
+      reject
+    )
+  })
+}
+
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (await getCurrentUser()) {
+      next()
+    } else {
+      alert('you dont have access!')
+      next('/signIn')
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

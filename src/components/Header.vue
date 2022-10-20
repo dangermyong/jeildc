@@ -1,5 +1,29 @@
 <script setup>
+import { onMounted, ref } from 'vue'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+const isLoggedIn = ref(false)
+const auth = getAuth()
+
+onMounted(() => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      isLoggedIn.value = true
+      const uid = user.uid;
+    } else {
+      isLoggedIn.value = false
+    }
+  })
+})
+
+
+const handleSignOut = () => {
+  signOut(auth).then(() => {
+    router.push('/')
+  })
+}
 </script>
 
 <template>
@@ -31,6 +55,10 @@
                   class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                   Register
                 </router-link>
+                <button v-if="isLoggedIn" @click="handleSignOut" type="button"
+                  class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  Sign out
+                </button>
               </div>
             </div>
           </div>
