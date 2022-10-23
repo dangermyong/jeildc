@@ -4,6 +4,7 @@ import Modal from '@/components/Modal.vue'
 
 import { collection, addDoc } from "firebase/firestore"
 import { db } from '@/js/firebase.js'
+import router from "@/router/index.js";
 
 async function saveAtFirebase() {
   inputData.id = new Date().getTime().toString()
@@ -11,6 +12,19 @@ async function saveAtFirebase() {
     ...inputData
   })
   console.log("Document written with ID: ", docRef.id)
+  clearInputData()
+  router.push('/')
+}
+
+const clearInputData = () => {
+  inputData.id = ''
+  inputData.date = new Date().toISOString().substring(0, 10)
+  inputData.isDay = true
+  inputData.machineName = ""
+  inputData.productName = ""
+  inputData.totalCount = 0
+  inputData.badCount = 0
+  inputData.goodCount = 0
 }
 
 const inputData = reactive({

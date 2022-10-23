@@ -4,14 +4,7 @@
       <div ref="modal" class="modal relative bg-white bg-opacity-100 px-20 py-20 rounded-md drop-shadow-2xl ">
         <button @click="$emit('xClicked')" class="absolute top-2 right-4 bg-none cursor-pointer">X</button>
         <div class="flex flex-col">
-          <h1 class="font-bold mb-3">Check Your Input</h1>
-          <span class="p-1">Date: {{ data.date }}</span>
-          <span class="p-1">Time: {{ data.isDay ? 'Day' : 'Night' }}</span>
-          <span class="p-1">Product: {{ data.productName }}</span>
-          <span class="p-1">Machine: {{ data.machineName }}</span>
-          <span class="p-1">Total: {{ data.totalCount }}</span>
-          <span class="p-1">Good: {{ data.goodCount }}</span>
-          <span class="p-1">NG: {{ data.badCount }}</span>
+          <DataLists :data="data" />
         </div>
         <div class="mt-10">
           <button @click.prevent="emit('xClicked')" type="submit"
@@ -29,6 +22,7 @@
 
 <script setup>
 import { onClickOutside } from '@vueuse/core'
+import DataLists from './DataLists.vue';
 
 const modal = ref(null)
 const props = defineProps({
