@@ -1,8 +1,20 @@
 <script setup>
-import { ref, reactive } from "vue";
-import Modal from "@/components/Modal.vue";
+import { ref, reactive } from "vue"
+import Modal from '@/components/Modal.vue'
+
+import { collection, addDoc } from "firebase/firestore"
+import { db } from '@/js/firebase.js'
+
+async function saveAtFirebase() {
+  inputData.id = new Date().getTime().toString()
+  const docRef = await addDoc(collection(db, 'reports'), {
+    ...inputData
+  })
+  console.log("Document written with ID: ", docRef.id)
+}
 
 const inputData = reactive({
+  id: '',
   date: new Date().toISOString().substring(0, 10),
   isDay: true,
   machineName: "",
@@ -15,7 +27,7 @@ const inputData = reactive({
 const isModalOpen = ref(false);
 
 function handleSubmit() {
-  console.log(inputData);
+  console.log(inputData)
 }
 
 const goodCount = computed(() => {
@@ -25,7 +37,7 @@ const goodCount = computed(() => {
 </script>
 
 <template>
-  <Modal @xClicked="isModalOpen = false" :data="inputData" v-if="isModalOpen" />
+  <Modal @saveAtFirebase="saveAtFirebase" @xClicked="isModalOpen = false" :data="inputData" v-if="isModalOpen" />
   <div>
     <div class="md:col-span-2 md:mt-0">
       <form action="#" method="POST">
@@ -33,7 +45,7 @@ const goodCount = computed(() => {
           <!-- input date -->
           <div class="space-y-1 bg-white px-4 py-3">
             <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-            <input v-model="inputData.date" type="date" name="date" id="date" autocomplete="date"
+            <input v-model="inputData.date" type="date" name="date" id="date"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
           </div>
           <!-- input Day or night-->
@@ -54,31 +66,29 @@ const goodCount = computed(() => {
           <div class="space-y-1 bg-white px-4 py-3">
             <label for="text" class="block text-sm font-medium text-gray-700">Product Name</label>
             <input v-model="inputData.productName" type="text" name="product-name" id="product-name"
-              autocomplete="product-name"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
           </div>
           <!-- input machine name-->
           <div class="space-y-1 bg-white px-4 py-3">
             <label for="text" class="block text-sm font-medium text-gray-700">Machine Name</label>
             <input v-model="inputData.machineName" type="text" name="machine-name" id="machine-name"
-              autocomplete="machine-name"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
           </div>
           <!-- input total count-->
           <div class="space-y-1 bg-white px-4 py-3">
-            <label for="number" class="block text-sm font-medium text-gray-700">Total number</label>
+            <label for="total-count" class="block text-sm font-medium text-gray-700">Total number</label>
             <input v-model="inputData.totalCount" id="total-count"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              name="total-count" placeholder="Insert total number" type="number" />
+              name="total-count" type="number" placeholder="Insert total number" />
           </div>
           <!-- input bad count-->
           <div class="space-y-1 bg-white px-4 py-3">
-            <label for="number" class="block text-sm font-medium text-gray-700">Bad number</label>
-            <input v-model="inputData.badCount" id="machine-name"
+            <label for="bad-count" class="block text-sm font-medium text-gray-700">Bad number</label>
+            <input v-model="inputData.badCount" id="bad-count"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              autocomplete="machine-name" name="machine-name" placeholder="Insert NG product number" type="number" />
+              name="bad-count" type="number" placeholder="Insert NG product number" />
           </div>
-          <!-- input good count-->
+          <!-- computed good count-->
           <div class="space-y-1 bg-white px-4 py-3">
             <label for="number" class="block text-sm font-medium text-gray-700">Good number</label>
             <div class="p-2 mt-1 block w-full rounded-md outline outline-gray-200">
