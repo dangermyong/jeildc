@@ -1,30 +1,34 @@
 <script setup>
 import { reactive } from 'vue'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '@/js/firebase.js'
 import { useRouter } from 'vue-router '
 
 const router = useRouter()
 const userInfo = reactive({
   email: '',
-  password: ''
+  password: '',
+  name: ''
 })
 
 function register() {
-  console.log(userInfo);
   createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
     .then((userCredential) => {
-      const user = userCredential.user
-      console.log(user)
-      router.push('/about')
+      updateProfile(auth.currentUser, {
+        displayName: userInfo.name
+      }).then(() => {
+        const user = userCredential.user
+        console.log(user)
+      }).catch((error) => {
+        console.log('Something wrong with profile');
+      });
+      router.push('/report')
     })
     .catch((error) => {
       console.log(error.message)
       alert(error.message)
     })
 }
-// https://youtu.be/xceR7mrrXsA  이거 보고 네비게이션 가드 완성하기
-
 </script>
 
 <template>
@@ -40,15 +44,21 @@ function register() {
             <div>
               <label for="email-address" class="sr-only">Email address</label>
               <input v-model="userInfo.email" id="email-address"
-                class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                class="mb-4 relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 autocomplete="email" name="email" placeholder="Email address" type="email" required>
             </div>
             <div>
               <label for="password" class="sr-only">Password</label>
-              <input v-model="userInfo.password" id="password" name="password" type="password"
-                autocomplete="current-password" required
-                class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                placeholder="Password">
+              <input v-model="userInfo.password" id="password"
+                class="mb-4 relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                autocomplete="current-password" name="password" placeholder="Password" type="password" required>
+            </div>
+
+            <div>
+              <label for="name" class="sr-only">Password</label>
+              <input v-model="userInfo.name" id="name"
+                class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                name="name" placeholder="name" type="name" required>
             </div>
           </div>
 

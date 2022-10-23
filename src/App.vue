@@ -8,5 +8,6 @@ import Header from '@/components/Header.vue'
     <main>
       <router-view />
     </main>
+    <div id="modal"></div>
   </div>
 </template>

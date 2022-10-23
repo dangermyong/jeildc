@@ -16,7 +16,7 @@ function signin() {
     .then((userCredential) => {
       const user = userCredential.user;
       console.log(user)
-      router.push('/about')
+      router.push('/report')
     })
     .catch((error) => {
       console.log(error.message)

@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '@/pages/HomePage.vue'
-import AboutPage from '@/pages/AboutPage.vue'
+import ReportPage from '@/pages/ReportPage.vue'
 import SignInPage from '@/pages/SignInPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
@@ -12,9 +12,9 @@ const routes = [
     component: HomePage,
   },
   {
-    path: '/about',
-    name: 'about',
-    component: AboutPage,
+    path: '/report',
+    name: 'report',
+    component: ReportPage,
     meta: {
       requiresAuth: true,
     }
@@ -23,11 +23,17 @@ const routes = [
     path: '/signin',
     name: 'signIn',
     component: SignInPage,
+    meta: {
+      isNotLoggedin: true,
+    }
   },
   {
     path: '/register',
     name: 'register',
     component: RegisterPage,
+    meta: {
+      isNotLoggedin: true,
+    }
   }
 ]
 
@@ -48,6 +54,19 @@ const getCurrentUser = () => {
     )
   })
 }
+
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record.meta.isNotLoggedin)) {
+    if (await getCurrentUser()) {
+      alert('Do not try go there')
+      next('/')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
