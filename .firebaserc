@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "jeildc"
-  }
+    "default": "jeildc-8df22",
+    "staging": "jeildc-8df22"
+  },
+  "targets": {},
+  "etags": {}
 }
